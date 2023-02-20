@@ -1,9 +1,13 @@
 import { Kraken } from 'node-kraken-api'
-import { computeGlobalPriceIndex } from '~/utils/order-book-helper'
+import { computeAverage } from '~/utils/average'
 
 const kraken = new Kraken()
 
 async function getPriceIndex(pair: string): Promise<number> {
+    if (pair.includes('BTC')) {
+        pair = pair.replace('BTC', 'XBT')
+    }
+
     const pairOrderBook = (await kraken.depth({ pair }))[pair]
 
     if (
@@ -18,7 +22,7 @@ async function getPriceIndex(pair: string): Promise<number> {
     const bestBid = Number(pairOrderBook.bids[0][0])
     const bestAsk = Number(pairOrderBook.asks[0][0])
 
-    return computeGlobalPriceIndex(bestBid, bestAsk)
+    return computeAverage([bestBid, bestAsk])
 }
 
 export { getPriceIndex }
