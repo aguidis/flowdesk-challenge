@@ -14,6 +14,13 @@ from 3 different exchanges :
 - [x] You will have to publish your source code in a VCS
 - [x] You must fetch at least one order book with the websocket protocol
 
+## Optimizations
+
+- Define allowed currencies pairs and normalize them for each exchange (e.g. Kraken uses XBT instead of BTC)
+- Suggestion for improving scalability:
+  - Create a background job for fetching order books and compute global price index before storing it in a database. 
+  - Our API endpoint would only fetch the latest data in the database.
+
 ## Tech Stack
 
 - Node v18.8.0
